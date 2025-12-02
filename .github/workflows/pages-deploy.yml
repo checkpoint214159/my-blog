@@ -43,8 +43,12 @@ jobs:
         env:
           JEKYLL_ENV: production
 
-      - name: Test site (Internal Links Only)
-        run: bundle exec htmlproofer _site --check-external-hash --disable-external
+      - name: Test site
+        run: |
+          bundle exec htmlproofer _site \
+            --check-external-hash \
+            --disable-external \
+            --url-swap "/my-blog:/"
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
