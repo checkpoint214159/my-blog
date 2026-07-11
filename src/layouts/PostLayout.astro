@@ -1,0 +1,51 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  description?: string;
+  tags?: string[];
+  difficulty?: string;
+  citations?: { title: string; url: string }[];
+}
+
+const { title, date, description, tags = [], difficulty, citations = [] } =
+  Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-SG', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header class="post-header">
+      <h1>{title}</h1>
+      <div class="post-meta">
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        {difficulty && <span class="tag">{difficulty}</span>}
+        {tags.map((tag) => <span class="tag">{tag}</span>)}
+      </div>
+    </header>
+    <div class="prose">
+      <slot />
+    </div>
+    {
+      citations.length > 0 && (
+        <section class="references">
+          <h2>References</h2>
+          <ol>
+            {citations.map((c) => (
+              <li>
+                <a href={c.url}>{c.title}</a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>

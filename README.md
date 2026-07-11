@@ -1,43 +1,50 @@
-# Chirpy Starter
+# ben's blog
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+Personal blog built with [Astro](https://astro.build). Posts live in
+`src/content/posts/` as plain markdown with KaTeX math support.
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+## Writing a post
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+Create `src/content/posts/my-post-title.md` — the filename becomes the URL
+(`/posts/my-post-title/`). Front matter:
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
-
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
+```yaml
+---
+title: 'My Post Title'
+date: 2026-07-12
+description: 'one-liner shown on the index and in RSS' # optional
+tags: [some, tags] # optional
+draft: true # optional — hides the post from the site
+---
 ```
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+Technical/explainer posts can additionally use `difficulty`, `category`,
+`domains`, `prerequisites`, and `citations` (rendered as a References section —
+see the Bayes post for an example).
 
-## Usage
+Math: `$inline$` and `$$display$$` (KaTeX, rendered at build time).
+Code blocks get Shiki syntax highlighting automatically.
+Raw HTML works inside markdown. Images go in `public/images/` and are
+referenced as `/images/foo.png`.
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+For interactive posts, drop an Astro component (or add a framework via
+`npx astro add react|svelte|...`) into `src/components/` and switch the post
+to `.mdx` with `npx astro add mdx`.
 
-## Contributing
+## Commands
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+| Command           | Action                                       |
+| ----------------- | -------------------------------------------- |
+| `npm install`     | Install dependencies                         |
+| `npm run dev`     | Local dev server at `localhost:4321`         |
+| `npm run build`   | Production build to `./dist/`                |
+| `npm run preview` | Preview the production build                 |
 
-## License
+## Deploying (Cloudflare)
 
-This work is published under [MIT][mit] License.
+Connected via Cloudflare's git integration (Workers & Pages → Create →
+connect this repo). Build command `npm run build`, output directory `dist`.
+Every push to the production branch deploys; other branches get preview URLs.
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+After the first deploy, update `site` in `astro.config.mjs` to the real URL
+(used for canonical links and RSS).
