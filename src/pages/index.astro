@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
@@ -8,31 +9,21 @@ const posts = (await getCollection('posts', ({ data }) => !data.draft)).sort(
 ---
 
 <BaseLayout>
-  <ul class="post-list">
+  <h1 align="center">{SITE_TITLE.toUpperCase()}</h1>
+  <p align="center">{SITE_DESCRIPTION}</p>
+  <ul>
     {
       posts.map((post) => (
         <li>
-          <a class="post-title" href={`/posts/${post.id}/`}>
-            {post.data.title}
-          </a>
-          <div class="post-meta">
-            <time datetime={post.data.date.toISOString()}>
-              {post.data.date.toLocaleDateString('en-SG', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </time>
-            {post.data.difficulty && (
-              <span class="tag">{post.data.difficulty}</span>
-            )}
-            {post.data.tags.slice(0, 4).map((tag) => (
-              <span class="tag">{tag}</span>
-            ))}
-          </div>
-          {post.data.description && (
-            <p class="post-desc">{post.data.description}</p>
-          )}
+          <a href={`/posts/${post.id}/`}>{post.data.title}</a>
+          {' '}
+          <small>
+            ({post.data.date.toLocaleDateString('en-SG', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })})
+          </small>
         </li>
       ))
     }

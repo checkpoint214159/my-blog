@@ -34,9 +34,10 @@ Draft filtering (`({ data }) => !data.draft`) is duplicated in three independent
 ### Rendering details
 
 - Math: `remark-math` + `rehype-katex`, configured in `astro.config.mjs`. `$inline$` and `$$display$$` render at build time; `katex/dist/katex.min.css` is imported globally in `BaseLayout.astro`.
-- Code blocks: Shiki with paired `light`/`dark` themes (`github-light`/`github-dark`) and `defaultColor: false` — this emits both color sets as CSS variables so the manual dark-mode toggle (inline script in `BaseLayout.astro`, using `data-theme` on `<html>` + `localStorage`) can switch code themes without a rebuild.
+- Code blocks: Shiki with a single `github-light` theme (inline styles). There is no dark mode and no JS on the site.
+- Styling is intentionally Berkshire-Hathaway-barebones: browser-default Times, blue/purple underlined links, `global.css` is ~20 lines. Prefer plain HTML elements over classes; only add CSS when a default is actually broken.
 - `astro.config.mjs`'s `site` is a placeholder (`https://my-blog.pages.dev`) used for canonical URLs and RSS — needs updating once a real domain/Pages URL exists.
 
 ### Layout structure
 
-`BaseLayout.astro` is the HTML shell (head, header/nav, theme toggle, footer) used by every page. `PostLayout.astro` wraps it for individual posts (title/meta/tags header, prose content via `<slot />`, optional References section from `citations`). `src/pages/index.astro` lists posts directly against `BaseLayout` without going through `PostLayout`.
+`BaseLayout.astro` is the HTML shell (head, `Home | About | RSS` text nav, footer) used by every page. `PostLayout.astro` wraps it for individual posts (h1, italic date + comma-joined difficulty/tags, content via `<slot />`, optional References section from `citations`). `src/pages/index.astro` lists posts directly against `BaseLayout` without going through `PostLayout`.
